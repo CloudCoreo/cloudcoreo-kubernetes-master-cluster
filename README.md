@@ -1,14 +1,21 @@
-audit RDS
-============================
-This stack will monitor RDS and alert on things CloudCoreo developers think are violations of best practices
+cloudcoreo-kubernetes-master-cluster
+=====================================
 
 
 ## Description
-This repo is designed to work with CloudCoreo. It will monitor RDS against best practices for you and send a report to the email address designated by the config.yaml AUDIT&#95;AWS&#95;RDS&#95;ALERT&#95;RECIPIENT value
+This repository is the [CloudCoreo](https://www.cloudcoreo.com) stack for kubernetes master.
+
+This stack will add a scalable, highly availabe, self healing kubernetes master cluster environment based on the [CloudCoreo leader election cluster here](http://hub.cloudcoreo.com/stack/leader-elect-cluster&#95;35519).
+
+Kubernetes allows you to manage a cluster of Linux containers as a single system to accelerate Dev and simplify Ops. The architecture is such that master and node clusters are both required. This is only the cluster for the master. This cluster expects an etcd cluster as well. If you need an etcd cluster there is one available [on the hub, here.](http://hub.cloudcoreo.com/stack/etcd-cluster&#95;06252)
+
+Interestingly there is no leader election with the kubernetes master. The requests are load balanced and the cluster exists simply for high availability. The durability is maintained by etcd.
+
+Default values will result in a 2 datacenter deployment behind an internal load balancer addressable via a DNS record. 
 
 
 ## Hierarchy
-![composite inheritance hierarchy](https://raw.githubusercontent.com/CloudCoreo/STACK/master/images/hierarchy.png "composite inheritance hierarchy")
+![composite inheritance hierarchy](https://raw.githubusercontent.com/CloudCoreo/cloudcoreo-kubernetes-master-cluster/master/images/hierarchy.png "composite inheritance hierarchy")
 
 
 
@@ -172,18 +179,20 @@ This repo is designed to work with CloudCoreo. It will monitor RDS against best 
   * description: Usually the private-routetable association is enough for us to find the subnets you need, but if you have more than one subnet, we may need a way to find them. unique tags is a great way. enter them there. i.e. ['Name=my-private-subnet']
 
 ## Tags
-1. Audit
-1. Best Practices
-1. Alert
-1. RDS
+1. Container Management
+1. Google
+1. Kubernetes
+1. High Availability
+1. Master
+1. Cluster
 
 ## Categories
-1. Audit
+1. Servers
 
 
 
 ## Diagram
-![diagram](https://raw.githubusercontent.com/CloudCoreo/STACK/master/images/diagram.png "diagram")
+![diagram](https://raw.githubusercontent.com/CloudCoreo/cloudcoreo-kubernetes-master-cluster/master/images/diagram.png "diagram")
 
 
 ## Icon
