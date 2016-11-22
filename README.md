@@ -5,9 +5,9 @@ cloudcoreo-kubernetes-master-cluster
 ## Description
 This repository is the [CloudCoreo](https://www.cloudcoreo.com) stack for kubernetes master.
 
-This stack will add a scalable, highly availabe, self healing kubernetes master cluster environment based on the [CloudCoreo leader election cluster here](http://hub.cloudcoreo.com/stack/leader-elect-cluster&#95;35519).
+This stack will add a scalable, highly availabe, self healing kubernetes master cluster environment based on the [CloudCoreo leader election cluster here](http://hub.cloudcoreo.com/stack/leader-elect-cluster_35519).
 
-Kubernetes allows you to manage a cluster of Linux containers as a single system to accelerate Dev and simplify Ops. The architecture is such that master and node clusters are both required. This is only the cluster for the master. This cluster expects an etcd cluster as well. If you need an etcd cluster there is one available [on the hub, here.](http://hub.cloudcoreo.com/stack/etcd-cluster&#95;06252)
+Kubernetes allows you to manage a cluster of Linux containers as a single system to accelerate Dev and simplify Ops. The architecture is such that master and node clusters are both required. This is only the cluster for the master. This cluster expects an etcd cluster as well. If you need an etcd cluster there is one available [on the hub, here.](http://hub.cloudcoreo.com/stack/etcd-cluster_06252)
 
 Interestingly there is no leader election with the kubernetes master. The requests are load balanced and the cluster exists simply for high availability. The durability is maintained by etcd.
 
@@ -112,7 +112,7 @@ Default values will result in a 2 datacenter deployment behind an internal load 
   * default: cloudops
 
 
-## Optional variables with no default
+## Optional variables with default
 
 ### `WAIT_FOR_ETCD`:
   * description: should we wait for etcd or just continue?
@@ -167,7 +167,7 @@ Default values will result in a 2 datacenter deployment behind an internal load 
   * default: true
 
 
-## Optional variables with default
+## Optional variables with no default
 
 ### `VPC_SEARCH_TAGS`:
   * description: if you have more than one VPC with the same CIDR, and it is not under CloudCoreo control, we need a way to find it. Enter some unique tags that exist on the VPC you want us to find. ['env=production','Name=prod-vpc']
