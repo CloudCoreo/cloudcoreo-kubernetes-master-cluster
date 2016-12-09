@@ -196,5 +196,5 @@ Default values will result in a 2 datacenter deployment behind an internal load 
 
 
 ## Icon
-
+![icon](https://raw.githubusercontent.com/CloudCoreo/cloudcoreo-kubernetes-master-cluster/master/images/icon.png "icon")
 
