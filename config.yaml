@@ -1,16 +1,4 @@
 variables:
-    AUTOSCALING_GROUP_MAXIMUM:
-        default: 1
-        description: Maximum number of instances the autoscale group will launch
-        overrides:
-        required: true
-        type: number
-    AUTOSCALING_GROUP_MINIMUM:
-        default: 1
-        description: Minimum number of instances the autoscale group will launch
-        overrides:
-        required: true
-        type: number
     KUBE_VERSION:
         description: kubernetes version
         type: String
