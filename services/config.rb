@@ -60,8 +60,8 @@ end
 
 coreo_aws_ec2_autoscaling "${KUBE_MASTER_NAME}" do
   action :sustain 
-  minimum 1
-  maximum 1
+  minimum "${AUTOSCALING_GROUP_MAXIMUM}"
+  maximum "${AUTOSCALING_GROUP_MINIMUM}"
   server_definition "${KUBE_MASTER_NAME}"
   subnet "${PRIVATE_SUBNET_NAME}"
   elbs ["${KUBE_MASTER_NAME}-elb"]
