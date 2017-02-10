@@ -27,6 +27,14 @@ Default values will result in a 2 datacenter deployment behind an internal load 
 
 ## Required variables with default
 
+### `AUTOSCALING_GROUP_MAXIMUM`:
+  * description: Maximum number of instances the autoscale group will launch
+  * default: 1
+
+### `AUTOSCALING_GROUP_MINIMUM`:
+  * description: Minimum number of instances the autoscale group will launch
+  * default: 1
+
 ### `KUBE_VERSION`:
   * description: kubernetes version
   * default: 1.1.4
