@@ -10,7 +10,7 @@ echo "installing kubernetes binaries"
 
 kube_dir="/opt/kubernetes"
 rm -rf "$kube_dir"
-mkdir -p "$kube_dir/build"
+mkdir -p "/tmp/build"
 
 (
     cd /tmp
@@ -32,7 +32,7 @@ mkdir -p "$kube_dir/build"
 	( echo yes | sh -x "kubernetes/cluster/get-kube-binaries.sh" )
     fi
 
-    tar xzvf kubernetes/server/kubernetes-server-linux-amd64.tar.gz -C "$kube_dir/build"
-    cp $kube_dir/build/kubernetes/server/bin/* $kube_dir/
-    #rm -rf $kube_dir/build
+    tar xzvf kubernetes/server/kubernetes-server-linux-amd64.tar.gz -C "/tmp/build"
+    mv /tmp/build/kubernetes/server/bin/* $kube_dir/
+    #rm -rf /tmp/build
 )
