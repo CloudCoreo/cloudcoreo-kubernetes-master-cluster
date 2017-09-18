@@ -10,6 +10,7 @@ echo "installing kubernetes binaries"
 
 kube_dir="/opt/kubernetes"
 rm -rf "$kube_dir"
+mkdir -p "$kube_dir"
 mkdir -p "/tmp/build"
 
 (
