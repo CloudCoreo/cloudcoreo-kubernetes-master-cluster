@@ -12,8 +12,6 @@ kube_dir="/opt/kubernetes"
 rm -rf "$kube_dir"
 mkdir -p "$kube_dir/build"
 
-if 
-
 (
     cd /tmp
     rm -f "kubernetes.tar.gz"
