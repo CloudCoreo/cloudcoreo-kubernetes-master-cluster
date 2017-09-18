@@ -15,12 +15,12 @@ mkdir -p "$kube_dir/build"
     cd /tmp
     rm -f "kubernetes.tar.gz"
 
+    curl -L "https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz" -o "kubernetes.tar.gz"
+    rm -rf kubernetes/
+    tar xzvf "kubernetes.tar.gz"
+
     if [ -f "kubernetes/cluster/get-kube-binaries.sh" ]; then
 	( echo yes | sh -x "kubernetes/cluster/get-kube-binaries.sh" )
-    else
-        curl -L "https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz" -o "kubernetes.tar.gz"
-        rm -rf kubernetes/
-        tar xzvf "kubernetes.tar.gz"
     fi
 
     tar xzvf kubernetes/server/kubernetes-server-linux-amd64.tar.gz -C "$kube_dir/build"
