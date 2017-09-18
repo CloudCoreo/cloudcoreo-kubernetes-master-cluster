@@ -11,11 +11,22 @@ echo "installing kubernetes binaries"
 kube_dir="/opt/kubernetes"
 rm -rf "$kube_dir"
 mkdir -p "$kube_dir/build"
+
+if 
+
 (
     cd /tmp
     rm -f "kubernetes.tar.gz"
 
-    curl -L "https://github.com/kubernetes/kubernetes/releases/download/v${KUBE_VERSION}/kubernetes.tar.gz" -o "kubernetes.tar.gz"
+    if echo $KUBE_VERSION | grep -q ^v ; then 
+	echo "no modification necessary - KUBE_VERSION=${KUBE_VERSION}" 
+    else 
+	echo "modification necessary - KUBE_VERSION=${KUBE_VERSION} but should = v${KUBE_VERSION}" 
+	KUBE_VERSION="v${KUBE_VERSION}"
+    fi
+
+    curl -L "https://github.com/kubernetes/kubernetes/releases/download/${KUBE_VERSION}/kubernetes.tar.gz" -o "kubernetes.tar.gz"
+
     rm -rf kubernetes/
     tar xzvf "kubernetes.tar.gz"
 
