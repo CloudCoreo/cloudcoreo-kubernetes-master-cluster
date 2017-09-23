@@ -38,13 +38,14 @@ redirect_stderr=true
 stdout_logfile=${KUBE_API_LOG_FILE}
 stdout_logfile_maxbytes=50MB
 
-command=/bin/bash -c '$kube_dir/kube-apiserver \
-                          --admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota \
-                          --etcd_servers=http://${ETCD_CLUSTER_NAME}.${DNS_ZONE}:2379  \
-                          --insecure-bind-address=0.0.0.0 \
-                          --service-cluster-ip-range=${KUBE_MASTER_SERVICE_IP_CIDRS} \
-                          --allow-privileged=true \
-                          --v=2 \
+command=/bin/bash -c '$kube_dir/kube-apiserver \\
+                          --admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota \\
+                          --etcd_servers=http://${ETCD_CLUSTER_NAME}.${DNS_ZONE}:2379  \\
+                          --insecure-bind-address=0.0.0.0 \\
+                          --service-cluster-ip-range=${KUBE_MASTER_SERVICE_IP_CIDRS} \\
+                          --allow-privileged=true \\
+                          --runtime-config=batch/v2alpha1=true \\
+                          --v=2 \\
                           '
 EOF
     fi
@@ -55,9 +56,9 @@ redirect_stderr=true
 stdout_logfile=${KUBE_CONTROLLER_MANAGER_LOG_FILE}
 stdout_logfile_maxbytes=50MB
 
-command=/bin/bash -c '$kube_dir/kube-controller-manager \
-                          --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \
-                          --v=2 \
+command=/bin/bash -c '$kube_dir/kube-controller-manager \\
+                          --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \\
+                          --v=2 \\
                           '
 EOF
     fi
@@ -68,10 +69,10 @@ redirect_stderr=true
 stdout_logfile=${KUBE_SCHEDULER_LOG_FILE}
 stdout_logfile_maxbytes=50MB
 
-command=/bin/bash -c '$kube_dir/kube-scheduler \
-                          --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \
-                          --address=${MY_IPADDRESS} \
-                          --v=2 \
+command=/bin/bash -c '$kube_dir/kube-scheduler \\
+                          --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \\
+                          --address=${MY_IPADDRESS} \\
+                          --v=2 \\
                           '
 EOF
     fi
