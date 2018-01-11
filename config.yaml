@@ -15,7 +15,7 @@ variables:
         description: kubernetes version
         type: string
         required: true
-        default: 1.7.6
+        default: 1.9.1
     WAIT_FOR_ETCD:
         description: should we wait for etcd or just continue?
         type: string
