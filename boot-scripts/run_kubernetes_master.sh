@@ -24,31 +24,71 @@ source /etc/profile.d/cluster
 echo "running kubernetes"
 
 kube_dir="/opt/kubernetes"
+sup_conf="/etc/supervisord.conf"
 
-cd "$kube_dir"
-name="$(echo $MY_IPADDRESS | perl -pe 's{\.}{}g')"
+(
 
-nohup ./kube-apiserver \
-    --admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota \
-    --etcd_servers=http://${ETCD_CLUSTER_NAME}.${DNS_ZONE}:2379  \
-    --insecure-bind-address=0.0.0.0 \
-    --service-cluster-ip-range=${KUBE_MASTER_SERVICE_IP_CIDRS} \
-    --allow-privileged=true \
-    --v=2 \
-    2>&1 >> ${KUBE_API_LOG_FILE} &
+    cd "$kube_dir"
+    name="$(echo $MY_IPADDRESS | perl -pe 's{\.}{}g')"
 
-nohup ./kube-controller-manager \
-    --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \
-    --v=2 \
-    2>&1 >> ${KUBE_CONTROLLER_MANAGER_LOG_FILE} &
+    if ! cat "$sup_conf" | grep -q "program:kube-apiserver"; then
+	cat <<EOF >> "$sup_conf"
+[program:kube-apiserver]
+redirect_stderr=true
+stdout_logfile=${KUBE_API_LOG_FILE}
+stdout_logfile_maxbytes=50MB
 
-nohup ./kube-scheduler \
-    --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \
-    --address=${MY_IPADDRESS} \
-    --v=2 \
-    2>&1 >> ${KUBE_SCHEDULER_LOG_FILE} &
+command=/bin/bash -c '$kube_dir/kube-apiserver \\
+                          --admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota \\
+                          --etcd_servers=http://${ETCD_CLUSTER_NAME}.${DNS_ZONE}:2379  \\
+                          --insecure-bind-address=0.0.0.0 \\
+                          --service-cluster-ip-range=${KUBE_MASTER_SERVICE_IP_CIDRS} \\
+                          --allow-privileged=true \\
+                          --runtime-config=batch/v2alpha1=true \\
+                          --v=2 \\
+                          '
+EOF
+    fi
+    if ! cat "$sup_conf" | grep -q "program:kube-controller-manager"; then
+	cat <<EOF >> "$sup_conf"
+[program:kube-controller-manager]
+redirect_stderr=true
+stdout_logfile=${KUBE_CONTROLLER_MANAGER_LOG_FILE}
+stdout_logfile_maxbytes=50MB
 
-nohup ./kube-proxy \
-    --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \
-    --v=2 \
-    2>&1 >> ${KUBE_PROXY_LOG_FILE} &
+command=/bin/bash -c '$kube_dir/kube-controller-manager \\
+                          --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \\
+                          --v=2 \\
+                          '
+EOF
+    fi
+    if ! cat "$sup_conf" | grep -q "program:kube-scheduler"; then
+	cat <<EOF >> "$sup_conf"
+[program:kube-scheduler]
+redirect_stderr=true
+stdout_logfile=${KUBE_SCHEDULER_LOG_FILE}
+stdout_logfile_maxbytes=50MB
+
+command=/bin/bash -c '$kube_dir/kube-scheduler \\
+                          --master=http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080 \\
+                          --address=${MY_IPADDRESS} \\
+                          --v=2 \\
+                          '
+EOF
+    fi
+    if ! cat "$sup_conf" | grep -q "program:kube-proxy"; then
+	cat <<EOF >> "$sup_conf"
+
+[program:kube-proxy]
+redirect_stderr=true
+stdout_logfile=${KUBE_PROXY_LOG_FILE}
+stdout_logfile_maxbytes=50MB
+command=/bin/bash -c '$kube_dir/kube-proxy \\
+                        --v=2 \\
+                        --master="http://${KUBE_MASTER_NAME}.${DNS_ZONE}:8080" \\
+                        '
+EOF
+    fi
+    supervisord
+
+)
